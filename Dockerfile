@@ -2,23 +2,22 @@ FROM tutum/lamp
 
 MAINTAINER Daniel Romero <infoslack@gmail.com>
 
+ENV VERSION 1.9
+
 RUN rm -rf /app && \
     apt-get update && \
-    apt-get install -y wget && \
+    apt-get install -y wget php5-gd && \
     rm -rf /var/lib/apt/lists/*
 
 COPY conf/* /tmp/
 
-RUN wget https://github.com/RandomStorm/DVWA/archive/v1.0.8.tar.gz && \
-    tar xvf /v1.0.8.tar.gz && \
-    mv -f /DVWA-1.0.8 /app && \
-    rm /app/.htaccess
-
-RUN mv /tmp/.htaccess /app && \
-    chmod +x /tmp/setup_db.sh && \
-    /tmp/setup_db.sh
-
-RUN sed -i "s/FileInfo/All/g" /etc/apache2/sites-available/000-default.conf
+RUN wget https://github.com/ethicalhack3r/DVWA/archive/v${VERSION}.tar.gz && \
+    tar xvf /v${VERSION}.tar.gz && \
+    mv -f /DVWA-${VERSION} /app && \
+    rm /app/.htaccess && \
+    mv /tmp/.htaccess /app && \
+    chmod +x /tmp/setup_dvwa.sh && \
+    /tmp/setup_dvwa.sh
 
 EXPOSE 80 3306
 
